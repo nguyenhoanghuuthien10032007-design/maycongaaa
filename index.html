@@ -1,0 +1,346 @@
+import React from 'react';
+
+// Tottenham fanpage single-file React component
+// - Tailwind CSS utility classes assumed available globally
+// - Uses public Wikimedia images for demonstration (replace with club assets when available)
+// - Features: club header, history, honours, legends, two formations (golden era + current) displayed as opposing formations on one pitch,
+//   player cards with image + personal info, best coach, shop section with fan counts per item.
+
+const TOTTENHAM_LOGO = 'https://upload.wikimedia.org/wikipedia/en/b/b4/Tottenham_Hotspur.svg';
+
+const playerImages = {
+  'Heung-min Son': 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Heung-min_Son_2019.jpg',
+  'Harry Kane': 'https://upload.wikimedia.org/wikipedia/commons/d/d0/Harry_Kane_2018.jpg',
+  'Hugo Lloris': 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Hugo_Lloris_2018.jpg',
+  'Gareth Bale': 'https://upload.wikimedia.org/wikipedia/commons/6/69/Gareth_Bale_2019.jpg',
+  'Luka Modrić': 'https://upload.wikimedia.org/wikipedia/commons/1/10/Luka_Modric_2018.jpg',
+  'Paul Gascoigne': 'https://upload.wikimedia.org/wikipedia/commons/8/89/Paul_Gascoigne_2014.jpg',
+  'Jimmy Greaves': 'https://upload.wikimedia.org/wikipedia/commons/5/5b/Jimmy_Greaves.jpg',
+  'Glenn Hoddle': 'https://upload.wikimedia.org/wikipedia/commons/2/21/Glenn_Hoddle.jpg'
+};
+
+const clubHistory = `Tottenham Hotspur Football Club (thường gọi là Tottenham hoặc Spurs) được thành lập năm 1882 tại Tottenham, Luân Đôn. Spurs là một trong những CLB danh tiếng của bóng đá Anh với truyền thống chơi tấn công đẹp mắt, sân nhà là White Hart Lane (trước kia) và hiện nay là Tottenham Hotspur Stadium. CLB có lịch sử tranh tài lâu dài ở hạng cao nhất của bóng đá Anh và thường xuyên góp mặt ở đấu trường châu Âu.`;
+
+const honours = [
+  { title: 'First Division / Premier League', count: 2 },
+  { title: 'FA Cup', count: 8 },
+  { title: 'Football League Cup', count: 4 },
+  { title: 'UEFA Cup Winners' Cup', count: 1 }
+];
+
+const legends = [
+  { name: 'Jimmy Greaves', note: 'One of English football’s greatest strikers' , img: playerImages['Jimmy Greaves']},
+  { name: 'Glenn Hoddle', note: 'Elegant midfielder and later manager', img: playerImages['Glenn Hoddle']},
+  { name: 'Paul Gascoigne', note: 'Talented playmaker with flair', img: playerImages['Paul Gascoigne']},
+  { name: 'Gary Mabbutt', note: 'Captain and defensive leader', img: '' }
+];
+
+// Golden-era squad (approx early 2010s / Spurs peak years with Bale/Modric/Van der Vaart era)
+const goldenEra = {
+  eraName: 'Golden Era (2010 - 2013 snapshot)',
+  formation: '4-2-3-1',
+  players: [
+    { name: 'Hugo Lloris', pos: 'GK', dob: '1986-12-26', nat: 'France', img: playerImages['Hugo Lloris'] },
+    { name: 'Kyle Walker', pos: 'RB', dob: '1990-05-28', nat: 'England', img: '' },
+    { name: 'Jan Vertonghen', pos: 'CB', dob: '1987-04-24', nat: 'Belgium', img: '' },
+    { name: 'Michael Dawson', pos: 'CB', dob: '1983-11-18', nat: 'England', img: '' },
+    { name: 'Gareth Bale', pos: 'LW', dob: '1989-07-16', nat: 'Wales', img: playerImages['Gareth Bale'] },
+    { name: 'Sandro', pos: 'CDM', dob: '1989-06-02', nat: 'Brazil', img: '' },
+    { name: 'Mousa Dembélé', pos: 'CM', dob: '1987-07-16', nat: 'Belgium', img: '' },
+    { name: 'Aaron Lennon', pos: 'RW', dob: '1987-04-16', nat: 'England', img: '' },
+    { name: 'Luka Modrić', pos: 'CAM', dob: '1985-09-09', nat: 'Croatia', img: playerImages['Luka Modrić'] },
+    { name: 'Rafael van der Vaart', pos: 'AM', dob: '1983-05-11', nat: 'Netherlands', img: '' },
+    { name: 'Jermain Defoe', pos: 'ST', dob: '1982-10-07', nat: 'England', img: '' }
+  ]
+};
+
+// Current squad snapshot (example, replace/update as desired)
+const currentSquad = {
+  eraName: 'Current Squad (snapshot)',
+  formation: '3-4-2-1',
+  players: [
+    { name: 'Hugo Lloris', pos: 'GK', dob: '1986-12-26', nat: 'France', img: playerImages['Hugo Lloris'] },
+    { name: 'Cristian Romero', pos: 'CB', dob: '1998-04-27', nat: 'Argentina', img: '' },
+    { name: 'Eric Dier', pos: 'CB', dob: '1994-01-15', nat: 'England', img: '' },
+    { name: 'Ben Davies', pos: 'CB', dob: '1993-04-24', nat: 'Wales', img: '' },
+    { name: 'Pedro Porro', pos: 'RM', dob: '1999-09-13', nat: 'Spain', img: '' },
+    { name: 'Rodrigo Bentancur', pos: 'CM', dob: '1997-06-25', nat: 'Uruguay', img: '' },
+    { name: 'Pape Matar Sarr', pos: 'CM', dob: '2002-06-09', nat: 'Senegal', img: '' },
+    { name: 'Dejan Kulusevski', pos: 'LM', dob: '2000-04-25', nat: 'Sweden', img: '' },
+    { name: 'Heung-min Son', pos: 'LF', dob: '1992-07-08', nat: 'South Korea', img: playerImages['Heung-min Son'] },
+    { name: 'Harry Kane', pos: 'ST', dob: '1993-07-28', nat: 'England', img: playerImages['Harry Kane'] },
+    { name: 'Giovani Lo Celso', pos: 'AM', dob: '1996-04-09', nat: 'Argentina', img: '' }
+  ]
+};
+
+const bestCoach = {
+  name: 'Bill Nicholson',
+  note: 'Often regarded as Tottenham’s greatest manager — led Spurs to the Double in 1960–61 and multiple trophies in the 1950s and 1960s.',
+  img: ''
+};
+
+const shopItems = [
+  { id: 1, title: 'Home Jersey 24/25', price: '£74.99', fans: 12456, img: '' },
+  { id: 2, title: 'Away Jersey 24/25', price: '£69.99', fans: 7832, img: '' },
+  { id: 3, title: 'Scarf - Classic', price: '£19.99', fans: 15123, img: '' },
+  { id: 4, title: 'Signed Ball (limited)', price: '£249.99', fans: 432, img: '' }
+];
+
+function PlayerCard({ player }) {
+  return (
+    <div className="flex flex-col items-center text-center w-36 p-2">
+      <div className="w-24 h-24 rounded-full overflow-hidden ring-2 ring-white bg-gray-100">
+        {player.img ? (
+          <img src={player.img} alt={player.name} className="object-cover w-full h-full" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-xs text-gray-600">No Image</div>
+        )}
+      </div>
+      <div className="mt-2 text-sm font-semibold">{player.name}</div>
+      <div className="text-xs text-gray-300">{player.pos}</div>
+      <div className="text-xs text-gray-400">{player.nat} • {player.dob}</div>
+    </div>
+  );
+}
+
+function FormationOverlay({ squad, side }) {
+  // side: 'left' or 'right' — used to flip positions so two formations face each other
+  const positions = {
+    '4-2-3-1': [ // simple Y positions (relative) for 11 players
+      { x: 50, y: 88 }, // GK
+      { x: 10, y: 70 }, // RB
+      { x: 30, y: 68 }, // CB
+      { x: 40, y: 68 }, // CB
+      { x: 60, y: 70 }, // LB
+      { x: 35, y: 50 }, // CDM
+      { x: 65, y: 50 }, // CM
+      { x: 20, y: 30 }, // RW
+      { x: 45, y: 35 }, // CAM
+      { x: 70, y: 30 }, // LW
+      { x: 50, y: 15 } // ST
+    ],
+    '3-4-2-1': [
+      { x: 50, y: 88 }, // GK
+      { x: 30, y: 65 }, // CB
+      { x: 50, y: 65 }, // CB
+      { x: 70, y: 65 }, // CB
+      { x: 20, y: 50 }, // RM
+      { x: 40, y: 50 }, // CM
+      { x: 60, y: 50 }, // CM
+      { x: 80, y: 50 }, // LM
+      { x: 40, y: 30 }, // LF
+      { x: 60, y: 30 }, // ST
+      { x: 50, y: 20 } // AM (positioned slightly forward)
+    ]
+  };
+
+  const coords = positions[squad.formation] || positions['4-2-3-1'];
+
+  return (
+    <div className="absolute inset-0">
+      {squad.players.map((p, idx) => {
+        const base = coords[idx] || { x: 50, y: 50 };
+        // flip horizontally for right side so they face each other
+        const x = side === 'right' ? 100 - base.x : base.x;
+        return (
+          <div
+            key={p.name}
+            style={{ left: `${x}%`, top: `${base.y}%` }}
+            className="absolute transform -translate-x-1/2 -translate-y-1/2"
+          >
+            <div className="bg-white/80 p-1 rounded-lg shadow-md w-36">
+              <PlayerCard player={p} />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export default function TottenhamFanpage() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-900 via-sky-900 to-gray-800 text-white font-sans">
+      {/* Header */}
+      <header className="max-w-6xl mx-auto p-6 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <img src={TOTTENHAM_LOGO} alt="Tottenham Logo" className="w-20 h-20" />
+          <div>
+            <h1 className="text-4xl font-black tracking-wide">Tottenham Hotspur</h1>
+            <p className="text-sm text-gray-200">The pride of North London — attack with flair</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <button className="bg-white text-sky-900 px-4 py-2 rounded-lg font-semibold shadow">Follow</button>
+          <div className="text-right">
+            <div className="text-xs text-gray-300">Official Fanpage Style</div>
+            <div className="font-semibold">1,234,567 Fans</div>
+          </div>
+        </div>
+      </header>
+
+      <main className="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left column: History, honours, legends */}
+        <section className="col-span-1 bg-white/5 rounded-2xl p-6 space-y-6">
+          <h2 className="text-2xl font-bold">Lịch sử</h2>
+          <p className="text-sm text-gray-200">{clubHistory}</p>
+
+          <h3 className="text-xl font-semibold pt-2">Danh hiệu tiêu biểu</h3>
+          <ul className="mt-2 space-y-2">
+            {honours.map((h) => (
+              <li key={h.title} className="flex justify-between items-center bg-white/3 p-2 rounded">
+                <div>
+                  <div className="font-semibold">{h.title}</div>
+                  <div className="text-xs text-gray-300">Legendary achievements</div>
+                </div>
+                <div className="text-2xl font-bold">{h.count}</div>
+              </li>
+            ))}
+          </ul>
+
+          <h3 className="text-xl font-semibold pt-2">Ngôi đền huyền thoại</h3>
+          <div className="grid grid-cols-2 gap-3 mt-2">
+            {legends.map((l) => (
+              <div key={l.name} className="bg-white/3 p-3 rounded flex items-center gap-3">
+                <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-200">
+                  {l.img ? <img src={l.img} alt={l.name} className="w-full h-full object-cover" /> : <div className="flex items-center justify-center text-xs">No Img</div>}
+                </div>
+                <div>
+                  <div className="font-semibold text-sm">{l.name}</div>
+                  <div className="text-xs text-gray-300">{l.note}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-4">
+            <h3 className="text-xl font-semibold">Best Manager</h3>
+            <div className="mt-2 bg-white/3 p-3 rounded">
+              <div className="font-semibold">{bestCoach.name}</div>
+              <div className="text-xs text-gray-300">{bestCoach.note}</div>
+            </div>
+          </div>
+        </section>
+
+        {/* Center column: Pitch with two formations */}
+        <section className="col-span-1 lg:col-span-2 bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/8f/Football_pitch.svg')] bg-center bg-cover rounded-2xl p-6 relative overflow-hidden">
+          <div className="bg-black/40 p-4 rounded-lg">
+            <h2 className="text-2xl font-bold">Tottenham — Two Squads Facing Off</h2>
+            <p className="text-sm text-gray-200">Golden Era vs Current Squad — formations positioned on the same pitch</p>
+          </div>
+
+          <div className="relative mt-6 h-[640px] bg-green-900/10 rounded-lg ring-1 ring-white/5">
+            {/* The pitch area */}
+            <div className="absolute inset-0 flex">
+              {/* Left side label */}
+              <div className="w-1/2 p-4 relative">
+                <div className="absolute top-4 left-4 bg-white/10 p-2 rounded">
+                  <div className="text-sm font-semibold">{goldenEra.eraName}</div>
+                  <div className="text-xs text-gray-300">Formation: {goldenEra.formation}</div>
+                </div>
+                <FormationOverlay squad={goldenEra} side="left" />
+              </div>
+
+              {/* Right side label */}
+              <div className="w-1/2 p-4 relative">
+                <div className="absolute top-4 right-4 bg-white/10 p-2 rounded text-right">
+                  <div className="text-sm font-semibold">{currentSquad.eraName}</div>
+                  <div className="text-xs text-gray-300">Formation: {currentSquad.formation}</div>
+                </div>
+                <FormationOverlay squad={currentSquad} side="right" />
+              </div>
+            </div>
+
+            {/* Center scoreboard area */}
+            <div className="absolute left-1/2 top-2 transform -translate-x-1/2 bg-white/10 p-3 rounded-md text-center">
+              <div className="text-sm font-semibold">Friendly — Match Simulation</div>
+              <div className="text-3xl font-black">Spurs</div>
+            </div>
+          </div>
+
+          {/* Player detail rows (optional) */}
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white/5 p-4 rounded">
+              <h4 className="font-semibold">Golden Era Players — Details</h4>
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                {goldenEra.players.map((p) => (
+                  <div key={p.name} className="flex items-center gap-3 bg-white/3 p-2 rounded">
+                    <div className="w-12 h-12 rounded overflow-hidden">
+                      {p.img ? <img src={p.img} alt={p.name} className="object-cover w-full h-full" /> : <div className="w-full h-full flex items-center justify-center text-xs">No Img</div>}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-sm">{p.name}</div>
+                      <div className="text-xs text-gray-300">{p.pos} • {p.nat}</div>
+                      <div className="text-xs text-gray-400">{p.dob}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white/5 p-4 rounded">
+              <h4 className="font-semibold">Current Squad — Details</h4>
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                {currentSquad.players.map((p) => (
+                  <div key={p.name} className="flex items-center gap-3 bg-white/3 p-2 rounded">
+                    <div className="w-12 h-12 rounded overflow-hidden">
+                      {p.img ? <img src={p.img} alt={p.name} className="object-cover w-full h-full" /> : <div className="w-full h-full flex items-center justify-center text-xs">No Img</div>}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-sm">{p.name}</div>
+                      <div className="text-xs text-gray-300">{p.pos} • {p.nat}</div>
+                      <div className="text-xs text-gray-400">{p.dob}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Rightmost column: Shop */}
+        <section className="col-span-1 bg-white/5 rounded-2xl p-6 space-y-4">
+          <h2 className="text-2xl font-bold">Official Shop</h2>
+          <p className="text-sm text-gray-200">Áo đấu, phụ kiện và hàng chính hãng — mỗi mục có lượng fan riêng</p>
+
+          <div className="grid grid-cols-1 gap-3 mt-3">
+            {shopItems.map((it) => (
+              <div key={it.id} className="flex items-center justify-between bg-white/3 p-3 rounded">
+                <div className="flex items-center gap-3">
+                  <div className="w-16 h-16 bg-white/5 rounded overflow-hidden flex items-center justify-center">IMG</div>
+                  <div>
+                    <div className="font-semibold text-sm">{it.title}</div>
+                    <div className="text-xs text-gray-300">{it.price}</div>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs text-gray-300">Fans interested</div>
+                  <div className="font-bold">{it.fans.toLocaleString()}</div>
+                  <button className="mt-2 bg-sky-600 px-3 py-1 rounded text-sm">Mua</button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-4">
+            <h3 className="text-lg font-semibold">Fan Statistics</h3>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              <div className="bg-white/3 p-3 rounded text-center">
+                <div className="text-xs text-gray-300">Followers</div>
+                <div className="font-bold">1,234,567</div>
+              </div>
+              <div className="bg-white/3 p-3 rounded text-center">
+                <div className="text-xs text-gray-300">Shop Fans</div>
+                <div className="font-bold">45,321</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="max-w-6xl mx-auto p-6 text-center text-sm text-gray-300">
+        <div>Designed to emulate an official fanpage style. Replace demo images with club assets for production use.</div>
+      </footer>
+    </div>
+  );
+}
